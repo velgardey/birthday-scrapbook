@@ -9,7 +9,10 @@ import ExpandedMessage from '../components/ExpandedMessage';
 const ViewWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-  background: url('/scrapbook-background.jpg') repeat;
+  background: #d4a76a;
+  background-image: 
+    repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(0,0,0,.1) 50px, rgba(0,0,0,.1) 51px),
+    repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(0,0,0,.1) 50px, rgba(0,0,0,.1) 51px);
   padding: 2rem;
   box-sizing: border-box;
 `;

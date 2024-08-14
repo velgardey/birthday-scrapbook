@@ -9,13 +9,17 @@ import BackButton from '../components/BackButton';
 
 const BoardWrapper = styled.div`
   width: 100%;
-  height: 100vh;
-  background: url('/cork-board-texture.jpg') repeat;
+  min-height: 100vh;
+  background: #d4a76a;
+  background-image: 
+    repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(0,0,0,.1) 50px, rgba(0,0,0,.1) 51px),
+    repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(0,0,0,.1) 50px, rgba(0,0,0,.1) 51px);
   padding: 2rem;
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
 `;
+
 const AddButton = styled(motion.button)`
   position: fixed;
   bottom: 2rem;

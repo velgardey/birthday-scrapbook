@@ -11,6 +11,7 @@ const FormWrapper = styled(motion.div)`
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
 `;
 
 const Form = styled.form`
