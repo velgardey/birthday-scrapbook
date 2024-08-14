@@ -10,7 +10,7 @@ import BackButton from '../components/BackButton';
 const BoardWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-  background: url('/cork-board.jpg') repeat;
+  background: url('/cork-board-texture.jpg') repeat;
   padding: 2rem;
   box-sizing: border-box;
 `;
@@ -42,20 +42,32 @@ const MessageBoard = () => {
     return `#${Math.floor(Math.random()*16777215).toString(16)}`;
   };
   
-  const addMessage = (formData: FormData) => {
+  const addMessage = async (formData: FormData) => {
+    const content = formData.get('content') as string;
+    const imageFile = formData.get('image') as File | null;
+    let imageDataUrl = '';
+
+    if (imageFile) {
+      imageDataUrl = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(imageFile);
+      });
+    }
+
     const newMessage: Message = {
-      content: formData.get('content') as string,
-      image: formData.get('image') as File,
+      content,
+      image: imageDataUrl,
       initialX: parseFloat(formData.get('initialX') as string),
       initialY: parseFloat(formData.get('initialY') as string),
       color: getRandomColor(),
     };
+
     const updatedMessages = [...messages, newMessage];
     setMessages(updatedMessages);
     localStorage.setItem('messages', JSON.stringify(updatedMessages));
     setShowForm(false);
   };
-
   return (
     <BoardWrapper>
       <BackButton />

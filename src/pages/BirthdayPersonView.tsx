@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import MessageComponent from '../components/Message';
 import { Message } from '../types';
 import BackButton from '../components/BackButton';
+import ExpandedMessage from '../components/ExpandedMessage';
 
 const ViewWrapper = styled.div`
   width: 100%;
@@ -28,6 +29,7 @@ const ResetButton = styled(motion.button)`
 
 const BirthdayPersonView = () => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [expandedMessage, setExpandedMessage] = useState<Message | null>(null);
 
   useEffect(() => {
     const savedMessages = JSON.parse(localStorage.getItem('messages') || '[]');
@@ -43,7 +45,12 @@ const BirthdayPersonView = () => {
     <ViewWrapper>
       <BackButton />
       {messages.map((message, index) => (
-        <MessageComponent key={index} {...message} onExpand={() => {}} />
+        <MessageComponent 
+          key={index} 
+          {...message} 
+          image={message.image}
+          onExpand={() => setExpandedMessage(message)}
+        />
       ))}
       <ResetButton
         whileHover={{ scale: 1.1 }}
@@ -52,6 +59,12 @@ const BirthdayPersonView = () => {
       >
         Reset Board
       </ResetButton>
+      {expandedMessage && (
+        <ExpandedMessage
+          {...expandedMessage}
+          onClose={() => setExpandedMessage(null)}
+        />
+      )}
     </ViewWrapper>
   );
 };

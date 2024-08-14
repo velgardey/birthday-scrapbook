@@ -18,17 +18,17 @@ const StyledBackButton = styled(motion.button)`
 `;
 
 const BackButton: React.FC = () => {
-  const navigate = useNavigate();
-
-  return (
-    <StyledBackButton
-      onClick={() => navigate('/')}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-    >
-      Back
-    </StyledBackButton>
-  );
-};
+    const navigate = useNavigate();
+  
+    return (
+      <StyledBackButton
+        onClick={() => navigate('/')}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        Back
+      </StyledBackButton>
+    );
+  };
 
 export default BackButton;

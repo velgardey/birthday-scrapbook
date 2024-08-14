@@ -10,7 +10,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Router>
+      <Router basename="/birthday-scrapbook">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/message-board" element={<MessageBoard />} />
