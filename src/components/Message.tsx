@@ -14,37 +14,49 @@ const getContrastColor = (hexColor: string) => {
   return luminance > 0.5 ? '#000000' : '#FFFFFF';
 };
 
-const StyledMessage = styled(motion.div)<{ backgroundColor: string }>`
+const StyledMessage = styled(motion.div)<{ backgroundColor: string; isDragging: boolean }>`
   position: absolute;
-  width: 300px;
+  width: 250px;
   min-height: 300px;
-  background-color: ${props => props.backgroundColor};
-  color: ${props => getContrastColor(props.backgroundColor)};
-  padding: 1rem;
-  border-radius: 5px;
+  background-color: white;
+  color: #333;
+  padding: 15px 15px 40px;
+  border-radius: 2px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: move;
   overflow: hidden;
+  transform: rotate(${() => Math.random() * 10 - 5}deg);
+  z-index: ${props => props.isDragging ? 1000 : 1};
+  transition: z-index 0s;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background-color: ${props => props.backgroundColor};
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 const MessageImage = styled.img`
   width: 100%;
   height: 200px;
   object-fit: cover;
-  margin-bottom: 1rem;
-  border-radius: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
 `;
 
 const MessageCaption = styled.p`
-  font-size: 0.9rem;
-  line-height: 1.2;
-  max-height: 3.6em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  color: inherit;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1rem;
+  line-height: 1.4;
+  text-align: center;
+  color: #333;
 `;
 
 interface MessageProps extends MessageType {
@@ -54,6 +66,7 @@ interface MessageProps extends MessageType {
 const MessageComponent: React.FC<MessageProps> = ({ content, image, initialX, initialY, color, onExpand }) => {
   const x = useMotionValue(initialX);
   const y = useMotionValue(initialY);
+  const rotate = useMotionValue(Math.random() * 20 - 10); // Random rotation between -10 and 10 degrees
   const [imageSrc, setImageSrc] = useState<string | undefined>(undefined);
   const [isDragging, setIsDragging] = useState(false);
   let clickTimer: number | null = null;
@@ -72,7 +85,7 @@ const MessageComponent: React.FC<MessageProps> = ({ content, image, initialX, in
       clearTimeout(clickTimer);
     }
   };
-
+  
   const handleDragEnd = () => {
     setIsDragging(false);
   };
@@ -90,21 +103,22 @@ const MessageComponent: React.FC<MessageProps> = ({ content, image, initialX, in
   }, [image]);
 
   return (
-    <StyledMessage
-      drag
-      dragMomentum={false}
-      style={{ x, y }}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      backgroundColor={color}
-      onMouseDown={handleClick}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      {imageSrc && <MessageImage src={imageSrc} alt="Message" />}
-      <MessageCaption>{content}</MessageCaption>
-    </StyledMessage>
+<StyledMessage
+  drag
+  dragMomentum={false}
+  style={{ x, y, rotate }}
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  backgroundColor={color}
+  isDragging={isDragging}
+  onMouseDown={handleClick}
+  onDragStart={handleDragStart}
+  onDragEnd={handleDragEnd}
+>
+  {imageSrc && <MessageImage src={imageSrc} alt="Message" />}
+  <MessageCaption>{content}</MessageCaption>
+</StyledMessage>
   );
-};
+};  
 
 export default MessageComponent;
