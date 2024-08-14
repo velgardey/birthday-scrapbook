@@ -9,12 +9,33 @@ const StyledBackButton = styled(motion.button)`
   left: 1rem;
   padding: 0.5rem 1rem;
   font-size: 1rem;
-  background-color: ${props => props.theme.colors.primary};
-  color: white;
-  border: none;
-  border-radius: 5px;
+  background-color: transparent;
+  color: ${props => props.theme.colors.primary};
+  border: 2px solid ${props => props.theme.colors.primary};
+  border-radius: 20px;
   cursor: pointer;
   z-index: 1000;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: ${props => props.theme.colors.primary};
+    transition: all 0.3s ease;
+    z-index: -1;
+  }
+
+  &:hover {
+    color: white;
+    &::before {
+      left: 0;
+    }
+  }
 `;
 
 const BackButton: React.FC = () => {

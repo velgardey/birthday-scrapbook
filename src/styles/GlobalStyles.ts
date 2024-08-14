@@ -10,6 +10,8 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     background-color: ${props => props.theme.colors.background};
     color: ${props => props.theme.colors.text};
+    perspective: 1500px;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {

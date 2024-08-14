@@ -7,6 +7,27 @@ import ExpandedMessage from '../components/ExpandedMessage';
 import { Message } from '../types';
 import BackButton from '../components/BackButton';
 
+const Prompt = styled(motion.div)`
+  position: fixed;
+  top: 4rem;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: ${props => props.theme.colors.primary};
+  text-align: center;
+  z-index: 1000;
+  width: 90%;
+  max-width: 800px;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 1rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
 const BoardWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
@@ -24,23 +45,41 @@ const AddButton = styled(motion.button)`
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  padding: 1rem;
-  font-size: 1.5rem;
+  width: 60px;
+  height: 60px;
+  font-size: 2rem;
   background-color: ${props => props.theme.colors.accent};
   color: white;
   border: none;
   border-radius: 50%;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+
+  &::before {
+    transition: all 0.3s ease;
+  }
+
+  &:hover {
+    background-color: ${props => props.theme.colors.primary};
+    transform: rotate(90deg);
+  }
 `;
 
 const MessageBoard = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [expandedMessage, setExpandedMessage] = useState<Message | null>(null);
+  const [showPrompt, setShowPrompt] = useState(true);
 
   useEffect(() => {
     const savedMessages = JSON.parse(localStorage.getItem('messages') || '[]');
     setMessages(savedMessages);
+    const timer = setTimeout(() => setShowPrompt(false), 5000);
+    return () => clearTimeout(timer);
   }, []);
 
   const getRandomColor = () => {
@@ -73,9 +112,22 @@ const MessageBoard = () => {
     localStorage.setItem('messages', JSON.stringify(updatedMessages));
     setShowForm(false);
   };
+
   return (
     <BoardWrapper>
       <BackButton />
+      <AnimatePresence>
+  {showPrompt && (
+    <Prompt
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -50 }}
+      transition={{ duration: 0.5 }}
+    >
+      Fill this page with moments and memories of your friend !
+    </Prompt>
+  )}
+</AnimatePresence>
       {messages.map((message, index) => (
         <MessageComponent
           key={index}
