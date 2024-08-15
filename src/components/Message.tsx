@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { motion, useMotionValue } from 'framer-motion';
 import { Message as MessageType } from '../types';
-
+import { FaMusic } from 'react-icons/fa';
 
 
 const StyledMessage = styled(motion.div)<{ backgroundColor: string; isDragging: boolean }>`
@@ -50,12 +50,19 @@ const MessageCaption = styled.p`
   color: #333;
 `;
 
+const AudioIcon = styled(FaMusic)`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: ${props => props.theme.colors.primary};
+`;
+
 interface MessageProps extends MessageType {
   onExpand: () => void;
   onDragEnd: (x: number, y: number) => void;
 }
 
-const MessageComponent: React.FC<MessageProps> = ({ content, image, initialX, initialY, color, onExpand, onDragEnd }) => {
+const MessageComponent: React.FC<MessageProps> = ({ content, image, audio, initialX, initialY, color, onExpand, onDragEnd }) => {
   const x = useMotionValue(initialX);
   const y = useMotionValue(initialY);
   const rotate = useMotionValue(Math.random() * 20 - 10);
@@ -96,22 +103,23 @@ const MessageComponent: React.FC<MessageProps> = ({ content, image, initialX, in
   }, [image]);
 
   return (
-<StyledMessage
-  drag
-  dragMomentum={false}
-  style={{ x, y, rotate }}
-  whileHover={{ scale: 1.05 }}
-  whileTap={{ scale: 0.95 }}
-  backgroundColor={color}
-  isDragging={isDragging}
-  onMouseDown={handleClick}
-  onDragStart={handleDragStart}
-  onDragEnd={handleDragEnd}
->
-  {imageSrc && <MessageImage src={imageSrc} alt="Message" />}
-  <MessageCaption>{content}</MessageCaption>
-</StyledMessage>
+    <StyledMessage
+      drag
+      dragMomentum={false}
+      style={{ x, y, rotate }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      backgroundColor={color}
+      isDragging={isDragging}
+      onMouseDown={handleClick}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      {imageSrc && <MessageImage src={imageSrc} alt="Message" />}
+      <MessageCaption>{content}</MessageCaption>
+      {audio && <AudioIcon />}
+    </StyledMessage>
   );
-};  
+};
 
 export default MessageComponent;

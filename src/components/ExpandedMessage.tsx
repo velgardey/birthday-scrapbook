@@ -42,11 +42,16 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
+const AudioPlayer = styled.audio`
+  width: 100%;
+  margin-top: 1rem;
+`;
+
 interface ExpandedMessageProps extends MessageType {
   onClose: () => void;
 }
 
-const ExpandedMessage: React.FC<ExpandedMessageProps> = ({ content, image, onClose }) => {
+const ExpandedMessage: React.FC<ExpandedMessageProps> = ({ content, image, audio, onClose }) => {
   return (
     <Overlay
       initial={{ opacity: 0 }}
@@ -63,6 +68,12 @@ const ExpandedMessage: React.FC<ExpandedMessageProps> = ({ content, image, onClo
         <CloseButton onClick={onClose}>&times;</CloseButton>
         {image && <ExpandedImage src={typeof image === 'string' ? image : URL.createObjectURL(image)} alt="Expanded Message" />}
         <p>{content}</p>
+        {audio && (
+          <AudioPlayer controls>
+            <source src={typeof audio === 'string' ? audio : URL.createObjectURL(audio)} type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </AudioPlayer>
+        )}
       </ExpandedMessageContainer>
     </Overlay>
   );

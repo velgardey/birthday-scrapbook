@@ -90,14 +90,32 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   gap: 1rem;
 `;
+const AudioInputWrapper = styled(FileInputWrapper)`
+  margin-top: 1rem;
+`;
+
+const AudioInputLabel = styled(FileInputLabel)`
+  background-color: ${props => props.theme.colors.secondary};
+  
+  &:hover {
+    background-color: ${props => props.theme.colors.primary};
+  }
+`;
 
 const MessageForm = ({ onSubmit, onClose }: { onSubmit: (message: any) => void, onClose: () => void }) => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState<File | null>(null);
+  const [audio, setAudio] = useState<File | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setImage(e.target.files[0]);
+    }
+  };
+
+  const handleAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setAudio(e.target.files[0]);
     }
   };
 
@@ -106,6 +124,7 @@ const MessageForm = ({ onSubmit, onClose }: { onSubmit: (message: any) => void, 
     const formData = new FormData();
     formData.append('content', content);
     if (image) formData.append('image', image);
+    if (audio) formData.append('audio', audio);
     formData.append('initialX', String(Math.random() * (window.innerWidth - 250)));
     formData.append('initialY', String(Math.random() * (window.innerHeight - 250)));
     onSubmit(formData);
@@ -135,6 +154,16 @@ const MessageForm = ({ onSubmit, onClose }: { onSubmit: (message: any) => void, 
             />
           </FileInputLabel>
         </FileInputWrapper>
+        <AudioInputWrapper>
+          <AudioInputLabel>
+            {audio ? 'Audio selected' : 'Choose an audio file'}
+            <FileInput
+              type="file"
+              accept="audio/*"
+              onChange={handleAudioChange}
+            />
+          </AudioInputLabel>
+        </AudioInputWrapper>
         <ButtonContainer>
           <Button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="submit">
             Add Message

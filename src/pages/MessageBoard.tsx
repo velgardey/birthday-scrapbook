@@ -92,8 +92,10 @@ const MessageBoard = () => {
   const addMessage = async (formData: FormData) => {
     const content = formData.get('content') as string;
     const imageFile = formData.get('image') as File | null;
+    const audioFile = formData.get('audio') as File | null;
     let imageDataUrl = '';
-
+    let audioDataUrl = '';
+  
     if (imageFile) {
       imageDataUrl = await new Promise<string>((resolve) => {
         const reader = new FileReader();
@@ -101,15 +103,24 @@ const MessageBoard = () => {
         reader.readAsDataURL(imageFile);
       });
     }
-
+  
+    if (audioFile) {
+      audioDataUrl = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(audioFile);
+      });
+    }
+  
     const newMessage: Message = {
       content,
       image: imageDataUrl,
+      audio: audioDataUrl,
       initialX: parseFloat(formData.get('initialX') as string),
       initialY: parseFloat(formData.get('initialY') as string),
       color: getRandomColor(),
     };
-
+  
     const updatedMessages = [...messages, newMessage];
     setMessages(updatedMessages);
     localStorage.setItem('messages', JSON.stringify(updatedMessages));
@@ -127,25 +138,25 @@ const MessageBoard = () => {
     <BoardWrapper>
       <BackButton />
       <AnimatePresence>
-  {showPrompt && (
-    <Prompt
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -50 }}
-      transition={{ duration: 0.5 }}
-    >
-      Fill this page with moments and memories of your friend !
-    </Prompt>
-  )}
-</AnimatePresence>
-{messages.map((message, index) => (
-  <MessageComponent
-    key={index}
-    {...message}
-    onExpand={() => setExpandedMessage(message)}
-    onDragEnd={(x: number, y: number) => updateMessagePosition(index, x, y)}
-  />
-))}
+        {showPrompt && (
+          <Prompt
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.5 }}
+          >
+            Fill this page with moments and memories of your friend !
+          </Prompt>
+        )}
+      </AnimatePresence>
+      {messages.map((message, index) => (
+        <MessageComponent
+          key={index}
+          {...message}
+          onExpand={() => setExpandedMessage(message)}
+          onDragEnd={(x: number, y: number) => updateMessagePosition(index, x, y)}
+        />
+      ))}
       <AddButton
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
