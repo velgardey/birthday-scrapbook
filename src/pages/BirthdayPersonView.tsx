@@ -145,13 +145,15 @@ const BirthdayPersonView = () => {
         onClick={resetBoard}
         aria-label="Reset Board"
       />
-{expandedMessage && (
-  <ExpandedMessage
-    {...expandedMessage}
-    onClose={() => setExpandedMessage(null)}
-    onUpdateMessage={updateMessage}
-  />
-)}
+<AnimatePresence>
+  {expandedMessage && (
+    <ExpandedMessage
+      {...expandedMessage}
+      onClose={() => setExpandedMessage(null)}
+      onUpdateMessage={updateMessage}
+    />
+  )}
+</AnimatePresence>
     </ViewWrapper>
   );
 };

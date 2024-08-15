@@ -3,6 +3,19 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Message, Comment } from '../types';
 
+const MessageContent = styled(motion.p)`
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: ${props => props.theme.colors.text};
+  background-color: ${props => props.theme.colors.background}80;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  text-align: center;
+`;
+
 const Overlay = styled(motion.div)`
   position: fixed;
   top: 0;
@@ -27,14 +40,14 @@ const ExpandedMessageContainer = styled(motion.div)`
   flex-direction: column;
 `;
 
-const ExpandedImage = styled.img`
+const ExpandedImage = styled(motion.img)`
   width: 100%;
   max-height: 60vh;
   object-fit: contain;
   margin-bottom: 1rem;
 `;
 
-const CloseButton = styled.button`
+const CloseButton = styled(motion.button)`
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -44,12 +57,12 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const AudioPlayer = styled.audio`
+const AudioPlayer = styled(motion.audio)`
   width: 100%;
   margin-top: 1rem;
 `;
 
-const ReactionContainer = styled.div`
+const ReactionContainer = styled(motion.div)`
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -67,11 +80,11 @@ const ReactionButton = styled(motion.button)`
   gap: 0.5rem;
 `;
 
-const CommentSection = styled.div`
+const CommentSection = styled(motion.div)`
   margin-top: 2rem;
 `;
 
-const CommentInput = styled.textarea`
+const CommentInput = styled(motion.textarea)`
   width: 100%;
   padding: 0.5rem;
   border: 1px solid ${props => props.theme.colors.primary};
@@ -80,31 +93,30 @@ const CommentInput = styled.textarea`
   margin-bottom: 0.5rem;
 `;
 
-const CharacterCount = styled.div`
+const CharacterCount = styled(motion.div)`
   font-size: 0.8rem;
   color: ${props => props.theme.colors.secondary};
   text-align: right;
   margin-bottom: 0.5rem;
 `;
 
-const CommentList = styled.ul`
+const CommentList = styled(motion.ul)`
   list-style-type: none;
   padding: 0;
 `;
 
-const CommentItem = styled.li`
+const CommentItem = styled(motion.li)`
   background-color: ${props => props.theme.colors.secondary}20;
   padding: 1rem;
   border-radius: 5px;
   margin-bottom: 1rem;
 `;
 
-const CommentCount = styled.span`
+const CommentCount = styled(motion.span)`
   font-size: 0.9rem;
   color: ${props => props.theme.colors.secondary};
   margin-left: 0.5rem;
 `;
-
 
 interface ExpandedMessageProps extends Message {
   onClose: () => void;
@@ -162,77 +174,130 @@ const ExpandedMessage: React.FC<ExpandedMessageProps> = ({
   };
 
   return (
-    <Overlay
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
-    >
-      <ExpandedMessageContainer
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.8, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
+    <AnimatePresence>
+      <Overlay
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
       >
-        <CloseButton onClick={onClose}>&times;</CloseButton>
-        {image && <ExpandedImage src={typeof image === 'string' ? image : URL.createObjectURL(image)} alt="Expanded Message" />}
-        <p>{content}</p>
-        {audio && (
-          <AudioPlayer controls>
-            <source src={typeof audio === 'string' ? audio : URL.createObjectURL(audio)} type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </AudioPlayer>
-        )}
-        <ReactionContainer>
-          {['👍', '❤️', '😂', '😮', '😢', '😡'].map((emoji) => (
-            <ReactionButton
-              key={emoji}
-              onClick={() => handleReaction(emoji)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              disabled={updatingReaction === emoji}
-            >
-              {emoji} {localReactions[emoji] || 0}
-              {updatingReaction === emoji && <span>...</span>}
-            </ReactionButton>
-          ))}
-        </ReactionContainer>
-        <CommentSection>
-          <h3>Comments <CommentCount>({localComments.length})</CommentCount></h3>
-          <CommentInput
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value.slice(0, 280))}
-            placeholder="Add a comment... (max 280 characters)"
-          />
-          <CharacterCount>{newComment.length}/280</CharacterCount>
-          <ReactionButton
-            onClick={handleAddComment}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            disabled={newComment.trim().length === 0}
+        <ExpandedMessageContainer
+          initial={{ scale: 0.8, opacity: 0, y: 50 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.8, opacity: 0, y: 50 }}
+          transition={{ type: "spring", damping: 15, stiffness: 100 }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <CloseButton
+            onClick={onClose}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
-            Add Comment
-          </ReactionButton>
-          <CommentList>
-            <AnimatePresence>
-              {localComments.map((comment) => (
-                <motion.div
-                  key={comment.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                >
-                  <CommentItem>
+            &times;
+          </CloseButton>
+          {image && (
+            <ExpandedImage
+              src={typeof image === 'string' ? image : URL.createObjectURL(image)}
+              alt="Expanded Message"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            />
+          )}
+          <MessageContent
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            {content}
+          </MessageContent>
+          {audio && (
+            <AudioPlayer
+              controls
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <source src={typeof audio === 'string' ? audio : URL.createObjectURL(audio)} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </AudioPlayer>
+          )}
+          <ReactionContainer
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            {['👍', '❤️', '😂', '😮', '😢', '😡'].map((emoji) => (
+              <ReactionButton
+                key={emoji}
+                onClick={() => handleReaction(emoji)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                disabled={updatingReaction === emoji}
+              >
+                {emoji} {localReactions[emoji] || 0}
+                {updatingReaction === emoji && <span>...</span>}
+              </ReactionButton>
+            ))}
+          </ReactionContainer>
+          <CommentSection
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+          >
+            <motion.h3
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+            >
+              Comments <CommentCount>({localComments.length})</CommentCount>
+            </motion.h3>
+            <CommentInput
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value.slice(0, 280))}
+              placeholder="Add a comment... (max 280 characters)"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+            />
+            <CharacterCount
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9 }}
+            >
+              {newComment.length}/280
+            </CharacterCount>
+            <ReactionButton
+              onClick={handleAddComment}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              disabled={newComment.trim().length === 0}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 }}
+            >
+              Add Comment
+            </ReactionButton>
+            <CommentList>
+              <AnimatePresence>
+                {localComments.map((comment, index) => (
+                  <CommentItem
+                    key={comment.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ delay: 1.1 + index * 0.1 }}
+                  >
                     <p>{comment.content}</p>
                     <small>{new Date(comment.timestamp).toLocaleString()}</small>
                   </CommentItem>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </CommentList>
-        </CommentSection>
-      </ExpandedMessageContainer>
-    </Overlay>
+                ))}
+              </AnimatePresence>
+            </CommentList>
+          </CommentSection>
+        </ExpandedMessageContainer>
+      </Overlay>
+    </AnimatePresence>
   );
 };
 

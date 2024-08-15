@@ -183,13 +183,15 @@ const MessageBoard = () => {
       </AddButton>
       {showForm && <MessageForm onSubmit={addMessage} onClose={() => setShowForm(false)} />}
       <AnimatePresence>
-      {expandedMessage && (
-  <ExpandedMessage
-    {...expandedMessage}
-    onClose={() => setExpandedMessage(null)}
-    onUpdateMessage={updateMessage}
-  />
-)}
+      <AnimatePresence>
+  {expandedMessage && (
+    <ExpandedMessage
+      {...expandedMessage}
+      onClose={() => setExpandedMessage(null)}
+      onUpdateMessage={updateMessage}
+    />
+  )}
+</AnimatePresence>
       </AnimatePresence>
     </BoardWrapper>
   );
