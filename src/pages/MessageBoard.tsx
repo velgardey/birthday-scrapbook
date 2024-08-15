@@ -80,7 +80,11 @@ const MessageBoard = () => {
 
   useEffect(() => {
     const savedMessages = JSON.parse(localStorage.getItem('messages') || '[]');
-    setMessages(savedMessages);
+    setMessages(savedMessages.map((message: Message) => ({
+      ...message,
+      reactions: message.reactions || {},
+      comments: message.comments || [],
+    })));
     const timer = setTimeout(() => setShowPrompt(false), 5000);
     return () => clearTimeout(timer);
   }, []);
@@ -113,12 +117,15 @@ const MessageBoard = () => {
     }
   
     const newMessage: Message = {
+      id: Date.now().toString(),
       content,
       image: imageDataUrl,
       audio: audioDataUrl,
       initialX: parseFloat(formData.get('initialX') as string),
       initialY: parseFloat(formData.get('initialY') as string),
       color: getRandomColor(),
+      reactions: {},
+      comments: [],
     };
   
     const updatedMessages = [...messages, newMessage];
@@ -127,11 +134,21 @@ const MessageBoard = () => {
     setShowForm(false);
   };
 
-  const updateMessagePosition = (index: number, x: number, y: number) => {
-    const updatedMessages = [...messages];
-    updatedMessages[index] = { ...updatedMessages[index], initialX: x, initialY: y };
+  const updateMessagePosition = (id: string, x: number, y: number) => {
+    const updatedMessages = messages.map(message =>
+      message.id === id ? { ...message, initialX: x, initialY: y } : message
+    );
     setMessages(updatedMessages);
     localStorage.setItem('messages', JSON.stringify(updatedMessages));
+  };
+
+  const updateMessage = (updatedMessage: Message) => {
+    const updatedMessages = messages.map(message =>
+      message.id === updatedMessage.id ? updatedMessage : message
+    );
+    setMessages(updatedMessages);
+    localStorage.setItem('messages', JSON.stringify(updatedMessages));
+    setExpandedMessage(updatedMessage);
   };
 
   return (
@@ -154,7 +171,7 @@ const MessageBoard = () => {
           key={index}
           {...message}
           onExpand={() => setExpandedMessage(message)}
-          onDragEnd={(x: number, y: number) => updateMessagePosition(index, x, y)}
+          onDragEnd={(x: number, y: number) => updateMessagePosition(message.id, x, y)}
         />
       ))}
       <AddButton
@@ -166,12 +183,13 @@ const MessageBoard = () => {
       </AddButton>
       {showForm && <MessageForm onSubmit={addMessage} onClose={() => setShowForm(false)} />}
       <AnimatePresence>
-        {expandedMessage && (
-          <ExpandedMessage
-            {...expandedMessage}
-            onClose={() => setExpandedMessage(null)}
-          />
-        )}
+      {expandedMessage && (
+  <ExpandedMessage
+    {...expandedMessage}
+    onClose={() => setExpandedMessage(null)}
+    onUpdateMessage={updateMessage}
+  />
+)}
       </AnimatePresence>
     </BoardWrapper>
   );
