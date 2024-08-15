@@ -60,6 +60,7 @@ const AddButton = styled(motion.button)`
   align-items: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
+  z-index: 1002;
 
   &::before {
     transition: all 0.3s ease;
@@ -115,6 +116,13 @@ const MessageBoard = () => {
     setShowForm(false);
   };
 
+  const updateMessagePosition = (index: number, x: number, y: number) => {
+    const updatedMessages = [...messages];
+    updatedMessages[index] = { ...updatedMessages[index], initialX: x, initialY: y };
+    setMessages(updatedMessages);
+    localStorage.setItem('messages', JSON.stringify(updatedMessages));
+  };
+
   return (
     <BoardWrapper>
       <BackButton />
@@ -130,13 +138,14 @@ const MessageBoard = () => {
     </Prompt>
   )}
 </AnimatePresence>
-      {messages.map((message, index) => (
-        <MessageComponent
-          key={index}
-          {...message}
-          onExpand={() => setExpandedMessage(message)}
-        />
-      ))}
+{messages.map((message, index) => (
+  <MessageComponent
+    key={index}
+    {...message}
+    onExpand={() => setExpandedMessage(message)}
+    onDragEnd={(x: number, y: number) => updateMessagePosition(index, x, y)}
+  />
+))}
       <AddButton
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}

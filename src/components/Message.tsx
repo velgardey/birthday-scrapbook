@@ -4,6 +4,7 @@ import { motion, useMotionValue } from 'framer-motion';
 import { Message as MessageType } from '../types';
 
 
+
 const StyledMessage = styled(motion.div)<{ backgroundColor: string; isDragging: boolean }>`
   position: absolute;
   width: 250px;
@@ -51,12 +52,13 @@ const MessageCaption = styled.p`
 
 interface MessageProps extends MessageType {
   onExpand: () => void;
+  onDragEnd: (x: number, y: number) => void;
 }
 
-const MessageComponent: React.FC<MessageProps> = ({ content, image, initialX, initialY, color, onExpand }) => {
+const MessageComponent: React.FC<MessageProps> = ({ content, image, initialX, initialY, color, onExpand, onDragEnd }) => {
   const x = useMotionValue(initialX);
   const y = useMotionValue(initialY);
-  const rotate = useMotionValue(Math.random() * 20 - 10); // Random rotation between -10 and 10 degrees
+  const rotate = useMotionValue(Math.random() * 20 - 10);
   const [imageSrc, setImageSrc] = useState<string | undefined>(undefined);
   const [isDragging, setIsDragging] = useState(false);
   let clickTimer: number | null = null;
@@ -78,6 +80,7 @@ const MessageComponent: React.FC<MessageProps> = ({ content, image, initialX, in
   
   const handleDragEnd = () => {
     setIsDragging(false);
+    onDragEnd(x.get(), y.get());
   };
 
   useEffect(() => {

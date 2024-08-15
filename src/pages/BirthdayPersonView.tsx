@@ -5,6 +5,7 @@ import MessageComponent from '../components/Message';
 import { Message } from '../types';
 import BackButton from '../components/BackButton';
 import ExpandedMessage from '../components/ExpandedMessage';
+import ReactConfetti from 'react-confetti';
 
 const WelcomeMessage = styled(motion.div)`
   position: fixed;
@@ -28,7 +29,6 @@ const WelcomeMessage = styled(motion.div)`
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.1);
 `;
-
 
 const ViewWrapper = styled.div`
   width: 100%;
@@ -76,12 +76,17 @@ const BirthdayPersonView = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [expandedMessage, setExpandedMessage] = useState<Message | null>(null);
   const [showWelcome, setShowWelcome] = useState(true);
+  const [showConfetti, setShowConfetti] = useState(true);
 
   useEffect(() => {
     const savedMessages = JSON.parse(localStorage.getItem('messages') || '[]');
     setMessages(savedMessages);
-    const timer = setTimeout(() => setShowWelcome(false), 5000);
-    return () => clearTimeout(timer);
+    const welcomeTimer = setTimeout(() => setShowWelcome(false), 5000);
+    const confettiTimer = setTimeout(() => setShowConfetti(false), 10000);
+    return () => {
+      clearTimeout(welcomeTimer);
+      clearTimeout(confettiTimer);
+    };
   }, []);
 
   const resetBoard = () => {
@@ -89,8 +94,16 @@ const BirthdayPersonView = () => {
     setMessages([]);
   };
 
+  const updateMessagePosition = (index: number, x: number, y: number) => {
+    const updatedMessages = [...messages];
+    updatedMessages[index] = { ...updatedMessages[index], initialX: x, initialY: y };
+    setMessages(updatedMessages);
+    localStorage.setItem('messages', JSON.stringify(updatedMessages));
+  };
+
   return (
     <ViewWrapper>
+      {showConfetti && <ReactConfetti />}
       <BackButton />
       <AnimatePresence>
         {showWelcome && (
@@ -105,13 +118,14 @@ const BirthdayPersonView = () => {
         )}
       </AnimatePresence>
       {messages.map((message, index) => (
-        <MessageComponent 
-          key={index} 
-          {...message} 
-          image={message.image}
-          onExpand={() => setExpandedMessage(message)}
-        />
-      ))}
+  <MessageComponent 
+    key={index} 
+    {...message} 
+    image={message.image}
+    onExpand={() => setExpandedMessage(message)}
+    onDragEnd={(x: number, y: number) => updateMessagePosition(index, x, y)}
+  />
+))}
       <ResetButton
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
