@@ -1,42 +1,21 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
-
-const PageWrapper = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: ${props => props.theme.colors.background};
-  z-index: 10;
-  overflow: hidden;
-`;
-
-const DecorativeElement = styled(motion.div)`
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  background: ${props => props.theme.colors.accent};
-  opacity: 0.2;
-  border-radius: 50%;
-`;
+import { ReactNode } from 'react';
 
 const pageVariants = {
   initial: {
     opacity: 0,
-    scale: 0.9,
-    rotateY: -90,
+    x: '-100vw',
+    scale: 0.8,
   },
   in: {
     opacity: 1,
+    x: 0,
     scale: 1,
-    rotateY: 0,
   },
   out: {
     opacity: 0,
-    scale: 1.1,
-    rotateY: 90,
+    x: '100vw',
+    scale: 1.2,
   },
 };
 
@@ -46,31 +25,21 @@ const pageTransition = {
   duration: 0.5,
 };
 
-const decorativeVariants = {
-  initial: { scale: 0, rotate: 0 },
-  in: { scale: 1, rotate: 360, transition: { delay: 0.2, duration: 0.5 } },
-  out: { scale: 0, rotate: 0 },
-};
+interface PageTransitionProps {
+  children: ReactNode;
+}
 
-const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   return (
-    <PageWrapper
+    <motion.div
       initial="initial"
       animate="in"
       exit="out"
       variants={pageVariants}
       transition={pageTransition}
     >
-      <DecorativeElement
-        variants={decorativeVariants}
-        style={{ top: '10%', left: '5%' }}
-      />
-      <DecorativeElement
-        variants={decorativeVariants}
-        style={{ bottom: '15%', right: '10%' }}
-      />
       {children}
-    </PageWrapper>
+    </motion.div>
   );
 };
 
