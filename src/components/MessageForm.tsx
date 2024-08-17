@@ -39,6 +39,10 @@ const TextArea = styled.textarea`
     border-color: ${props => props.theme.colors.primary};
     box-shadow: 0 0 0 2px ${props => props.theme.colors.primary}40;
   }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 16px; // Prevents zoom on mobile when focusing
+  }
 `;
 
 const Button = styled(motion.button)`
@@ -53,6 +57,11 @@ const Button = styled(motion.button)`
 
   &:hover {
     background-color: ${props => props.theme.colors.accent};
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
   }
 `;
 

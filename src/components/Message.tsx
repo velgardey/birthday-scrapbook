@@ -27,6 +27,7 @@ const StyledMessage = styled(motion.div)<{ backgroundColor: string; isDragging: 
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
     width: 200px;
     min-height: 250px;
+    font-size: 0.9rem;
   }
 `;
 

@@ -10,6 +10,7 @@ const LandingPageWrapper = styled.div`
   height: 100vh;
   background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
   overflow: hidden;
+  padding: 1rem;
 `;
 
 const Content = styled(motion.div)`
@@ -23,7 +24,8 @@ const Content = styled(motion.div)`
   max-width: 600px;
 
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
+    width: 100%;
   }
 `;
 
@@ -35,7 +37,7 @@ const Title = styled.h1`
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    font-size: 2.5rem;
+    font-size: 3rem;
   }
 `;
 
@@ -46,13 +48,13 @@ const Subtitle = styled.p`
   font-family: 'Montserrat', sans-serif;
 
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 `;
 
 const Button = styled(motion.button)`
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
   font-family: 'Montserrat', sans-serif;
   background-color: #ffffff;
   color: #fda085;
@@ -65,6 +67,13 @@ const Button = styled(motion.button)`
   &:hover {
     background-color: #fda085;
     color: #ffffff;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
   }
 `;
 
@@ -80,6 +89,11 @@ const OptionsContainer = styled(motion.div)`
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  padding: 2rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    gap: 1.5rem;
+  }
 `;
 
 const LandingPage = () => {

@@ -27,6 +27,12 @@ const WelcomeMessage = styled(motion.div)`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.2);
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 1.8rem;
+    padding: 1rem;
+    top: 3rem;
+  }
 `;
 
 const ViewWrapper = styled.div`
@@ -34,12 +40,16 @@ const ViewWrapper = styled.div`
   min-height: 100vh;
   background: #d4a76a;
   background-image: 
-  repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(0,0,0,.1) 50px, rgba(0,0,0,.1) 51px),
-  repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(0,0,0,.1) 50px, rgba(0,0,0,.1) 51px);
+    repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(0,0,0,.1) 50px, rgba(0,0,0,.1) 51px),
+    repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(0,0,0,.1) 50px, rgba(0,0,0,.1) 51px);
   padding: 2rem;
   box-sizing: border-box;
-  perspective: 1000px;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 1rem;
+  }
 `;
+
 const ResetButton = styled(motion.button)`
   position: fixed;
   bottom: 2rem;
@@ -68,6 +78,13 @@ const ResetButton = styled(motion.button)`
   &:hover {
     background-color: ${props => props.theme.colors.accent};
     transform: rotate(180deg);
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    width: 50px;
+    height: 50px;
+    bottom: 1.5rem;
+    right: 1.5rem;
   }
 `;
 
