@@ -1,50 +1,52 @@
-# React + TypeScript + Vite
+# Birthday Scrapbook
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Birthday Scrapbook is an interactive web application that allows users to create and share personalized birthday messages and memories. It's built using React, TypeScript, and Vite, with a focus on creating an engaging and visually appealing user experience.
 
-Currently, two official plugins are available:
+![Landing Page Screenshot](screenshots/landing-page.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+### 1. Interactive Landing Page
+- Welcoming design with animated elements
+- Option to open the scrapbook or leave a message
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### 2. Message Board
+- Add personalized messages with text, images, and audio
+- Drag and drop functionality for message positioning
+- Real-time updates and persistence using local storage
 
-- Configure the top-level `parserOptions` property like this:
+![Message Board Screenshot](screenshots/message-board.png)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### 3. Birthday Person View
+- Special view for the birthday person to see all messages
+- Confetti animation on load for a celebratory feel
+- Option to reset the board
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+![Birthday View Screenshot](screenshots/birthday-view.png)
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### 4. Message Interactions
+- Expand messages to view full content
+- Add reactions to messages (emojis)
+- Comment on messages
+- Play audio messages
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+![Expanded Message Screenshot](screenshots/expanded-message.png)
+
+### 5. Responsive Design
+- Fully responsive layout that works on desktop and mobile devices
+
+### 6. Animations and Transitions
+- Smooth page transitions using Framer Motion
+- Animated message cards and buttons for an interactive feel
+
+## Technical Highlights
+
+- Built with React and TypeScript for robust, type-safe code
+- Utilizes Vite for fast development and optimized builds
+- Styled with styled-components for dynamic and maintainable CSS
+- Implements Framer Motion for fluid animations and transitions
+- Uses local storage for data persistence without a backend
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.

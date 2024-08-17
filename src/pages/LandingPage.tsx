@@ -115,14 +115,14 @@ const LandingPage = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => handleNavigation('/birthday-view')}
             >
-              I'm The Birthday Person
+              It's My Day !
             </Button>
             <Button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleNavigation('/message-board')}
             >
-              Leave a Message
+              I'm here to leave a message
             </Button>
           </OptionsContainer>
         )}

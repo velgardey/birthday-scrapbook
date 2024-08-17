@@ -14,20 +14,19 @@ const Prompt = styled(motion.div)`
   right: 0;
   margin: 0 auto;
   font-family: 'Dancing Script', cursive;
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #ffffff;
+  font-size: 1.8rem;
+  color: ${props => props.theme.colors.text};
   text-align: center;
   z-index: 1000;
   width: 90%;
-  max-width: 800px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(135deg, ${props => props.theme.colors.primary}80, ${props => props.theme.colors.accent}80);
-  padding: 1.5rem;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  max-width: 600px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 `;
 
 const BoardWrapper = styled.div`

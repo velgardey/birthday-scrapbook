@@ -7,32 +7,57 @@ import { FaMusic } from 'react-icons/fa';
 
 const StyledMessage = styled(motion.div)<{ backgroundColor: string; isDragging: boolean }>`
   position: absolute;
-  width: 280px;
-  min-height: 320px;
+  width: 250px;
+  min-height: 300px;
   background-color: white;
   color: #333;
   padding: 15px 15px 40px;
   border-radius: 3px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: move;
   overflow: hidden;
-  transform: rotate(${() => Math.random() * 20 - 10}deg);
+  transform: rotate(${() => Math.random() * 10 - 5}deg);
   z-index: ${props => props.isDragging ? 1000 : 1};
   transition: z-index 0s, box-shadow 0.3s ease;
-  border: 15px solid white;
 
   &:hover {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   }
+`;
 
+const Pin = styled.div<{ backgroundColor: string }>`
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  background-color: ${props => props.backgroundColor};
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background-color: ${props => props.backgroundColor};
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 2px 2px;
   }
 `;
 
@@ -117,6 +142,7 @@ const MessageComponent: React.FC<MessageProps> = ({ content, image, audio, initi
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
+      <Pin backgroundColor={color} />
       {imageSrc && <MessageImage src={imageSrc} alt="Message" />}
       <MessageCaption>{content}</MessageCaption>
       {audio && <AudioIcon />}
