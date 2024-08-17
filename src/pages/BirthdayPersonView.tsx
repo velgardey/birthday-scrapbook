@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import MessageComponent from '../components/Message';
 import { Message } from '../types';
 import BackButton from '../components/BackButton';
 import ExpandedMessage from '../components/ExpandedMessage';
 import ReactConfetti from 'react-confetti';
+import GiftWrappedMessage from '../components/GiftWrappedMessage';
 
 const WelcomeMessage = styled(motion.div)`
   position: fixed;
@@ -38,8 +38,8 @@ const ViewWrapper = styled.div`
   repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(0,0,0,.1) 50px, rgba(0,0,0,.1) 51px);
   padding: 2rem;
   box-sizing: border-box;
+  perspective: 1000px;
 `;
-
 const ResetButton = styled(motion.button)`
   position: fixed;
   bottom: 2rem;
@@ -76,6 +76,7 @@ const BirthdayPersonView = () => {
   const [expandedMessage, setExpandedMessage] = useState<Message | null>(null);
   const [showWelcome, setShowWelcome] = useState(true);
   const [showConfetti, setShowConfetti] = useState(true);
+  const [revealedMessages, setRevealedMessages] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const savedMessages = JSON.parse(localStorage.getItem('messages') || '[]');
@@ -95,6 +96,7 @@ const BirthdayPersonView = () => {
   const resetBoard = () => {
     localStorage.removeItem('messages');
     setMessages([]);
+    setRevealedMessages(new Set());
   };
 
   const updateMessagePosition = (id: string, x: number, y: number) => {
@@ -113,6 +115,10 @@ const BirthdayPersonView = () => {
     localStorage.setItem('messages', JSON.stringify(updatedMessages));
   };
 
+  const handleReveal = (id: string) => {
+    setRevealedMessages(prev => new Set(prev).add(id));
+  };
+
   return (
     <ViewWrapper>
       {showConfetti && <ReactConfetti />}
@@ -125,34 +131,35 @@ const BirthdayPersonView = () => {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5 }}
           >
-            Happy Birthday! Check out the messages and moments your friends sent you !
+            Happy Birthday! Unwrap your messages and moments!
           </WelcomeMessage>
         )}
       </AnimatePresence>
       {messages.map((message, index) => (
-  <MessageComponent 
-    key={index} 
-    {...message} 
-    image={message.image}
-    onExpand={() => setExpandedMessage(message)}
-    onDragEnd={(x: number, y: number) => updateMessagePosition(message.id, x, y)}
-  />
-))}
+        <GiftWrappedMessage
+          key={index}
+          message={message}
+          isRevealed={revealedMessages.has(message.id)}
+          onReveal={() => handleReveal(message.id)}
+          onExpand={() => setExpandedMessage(message)}
+          onDragEnd={(x: number, y: number) => updateMessagePosition(message.id, x, y)}
+        />
+      ))}
       <ResetButton
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={resetBoard}
         aria-label="Reset Board"
       />
-<AnimatePresence>
-  {expandedMessage && (
-    <ExpandedMessage
-      {...expandedMessage}
-      onClose={() => setExpandedMessage(null)}
-      onUpdateMessage={updateMessage}
-    />
-  )}
-</AnimatePresence>
+      <AnimatePresence>
+        {expandedMessage && (
+          <ExpandedMessage
+            {...expandedMessage}
+            onClose={() => setExpandedMessage(null)}
+            onUpdateMessage={updateMessage}
+          />
+        )}
+      </AnimatePresence>
     </ViewWrapper>
   );
 };

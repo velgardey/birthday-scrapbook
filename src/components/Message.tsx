@@ -87,9 +87,11 @@ const AudioIcon = styled(FaMusic)`
 interface MessageProps extends MessageType {
   onExpand: () => void;
   onDragEnd: (x: number, y: number) => void;
+  style?: React.CSSProperties;
+  onClick?: () => void;
 }
 
-const MessageComponent: React.FC<MessageProps> = ({ content, image, audio, initialX, initialY, color, onExpand, onDragEnd }) => {
+const MessageComponent: React.FC<MessageProps> = ({ content, image, audio, initialX, initialY, color, onExpand, onDragEnd, style, onClick }) => {
   const x = useMotionValue(initialX);
   const y = useMotionValue(initialY);
   const rotate = useMotionValue(Math.random() * 20 - 10);
@@ -130,18 +132,18 @@ const MessageComponent: React.FC<MessageProps> = ({ content, image, audio, initi
   }, [image]);
 
   return (
-    <StyledMessage
-      drag
-      dragMomentum={false}
-      style={{ x, y, rotate }}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      backgroundColor={color}
-      isDragging={isDragging}
-      onMouseDown={handleClick}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
+<StyledMessage
+  drag
+  dragMomentum={false}
+  style={{ x, y, rotate, ...style }}
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  backgroundColor={color}
+  isDragging={isDragging}
+  onMouseDown={onClick || handleClick}
+  onDragStart={handleDragStart}
+  onDragEnd={handleDragEnd}
+>
       <Pin backgroundColor={color} />
       {imageSrc && <MessageImage src={imageSrc} alt="Message" />}
       <MessageCaption>{content}</MessageCaption>
