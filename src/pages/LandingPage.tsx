@@ -19,6 +19,12 @@ const Content = styled(motion.div)`
   backdrop-filter: blur(10px);
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 600px;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 1.5rem;
+  }
 `;
 
 const Title = styled.h1`
@@ -27,6 +33,10 @@ const Title = styled.h1`
   margin-bottom: 1.5rem;
   font-family: 'Dancing Script', cursive;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 2.5rem;
+  }
 `;
 
 const Subtitle = styled.p`
@@ -34,6 +44,10 @@ const Subtitle = styled.p`
   color: #ffffff;
   margin-bottom: 2rem;
   font-family: 'Montserrat', sans-serif;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 1rem;
+  }
 `;
 
 const Button = styled(motion.button)`

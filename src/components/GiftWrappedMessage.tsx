@@ -11,6 +11,11 @@ const GiftContainer = styled(motion.div)`
   cursor: pointer;
   width: 220px;
   height: 220px;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    width: 180px;
+    height: 180px;
+  }
 `;
 
 const Gift = styled(motion.div)`

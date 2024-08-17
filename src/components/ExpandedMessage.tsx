@@ -38,6 +38,12 @@ const ExpandedMessageContainer = styled(motion.div)`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 1.5rem;
+    max-width: 90%;
+    max-height: 90%;
+  }
 `;
 
 const ExpandedImage = styled(motion.img)`

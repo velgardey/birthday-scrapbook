@@ -3,17 +3,19 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
 const FormWrapper = styled(motion.div)`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background-color: ${props => props.theme.colors.background};
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  z-index: 1001;
   width: 90%;
   max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 1.5rem;
+    width: 95%;
+  }
 `;
 
 const Form = styled.form`

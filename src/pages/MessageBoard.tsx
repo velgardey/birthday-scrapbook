@@ -7,6 +7,19 @@ import ExpandedMessage from '../components/ExpandedMessage';
 import { Message } from '../types';
 import BackButton from '../components/BackButton';
 
+const FullScreenOverlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${props => props.theme.colors.background};
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Prompt = styled(motion.div)`
   position: fixed;
   top: 4rem;
@@ -40,6 +53,10 @@ const BoardWrapper = styled.div`
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 1rem;
+  }
 `;
 
 const AddButton = styled(motion.button)`
@@ -68,6 +85,14 @@ const AddButton = styled(motion.button)`
   &:hover {
     background-color: ${props => props.theme.colors.primary};
     transform: rotate(90deg);
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    bottom: 1rem;
+    right: 1rem;
   }
 `;
 
@@ -161,7 +186,7 @@ const MessageBoard = () => {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5 }}
           >
-            Fill this page with moments and memories of your friend !
+            Fill this page with moments and memories of your friend for his special day !
           </Prompt>
         )}
       </AnimatePresence>
@@ -180,17 +205,25 @@ const MessageBoard = () => {
       >
         +
       </AddButton>
-      {showForm && <MessageForm onSubmit={addMessage} onClose={() => setShowForm(false)} />}
       <AnimatePresence>
+        {showForm && (
+          <FullScreenOverlay
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <MessageForm onSubmit={addMessage} onClose={() => setShowForm(false)} />
+          </FullScreenOverlay>
+        )}
+      </AnimatePresence>
       <AnimatePresence>
-  {expandedMessage && (
-    <ExpandedMessage
-      {...expandedMessage}
-      onClose={() => setExpandedMessage(null)}
-      onUpdateMessage={updateMessage}
-    />
-  )}
-</AnimatePresence>
+        {expandedMessage && (
+          <ExpandedMessage
+            {...expandedMessage}
+            onClose={() => setExpandedMessage(null)}
+            onUpdateMessage={updateMessage}
+          />
+        )}
       </AnimatePresence>
     </BoardWrapper>
   );
