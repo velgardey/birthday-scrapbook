@@ -7,30 +7,32 @@ import { FaMusic } from 'react-icons/fa';
 
 const StyledMessage = styled(motion.div)<{ backgroundColor: string; isDragging: boolean }>`
   position: absolute;
-  width: 250px;
-  min-height: 300px;
+  width: 280px;
+  min-height: 320px;
   background-color: white;
   color: #333;
   padding: 15px 15px 40px;
-  border-radius: 2px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   cursor: move;
   overflow: hidden;
-  transform: rotate(${() => Math.random() * 10 - 5}deg);
+  transform: rotate(${() => Math.random() * 20 - 10}deg);
   z-index: ${props => props.isDragging ? 1000 : 1};
-  transition: z-index 0s;
+  transition: z-index 0s, box-shadow 0.3s ease;
+  border: 15px solid white;
+
+  &:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
 
   &::before {
     content: '';
     position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
     background-color: ${props => props.backgroundColor};
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 `;
 
