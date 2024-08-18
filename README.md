@@ -21,6 +21,7 @@ Birthday Scrapbook is an interactive web application that allows users to create
 - Special view for the birthday person to see all messages
 - Confetti animation on load for a celebratory feel
 - Option to reset the board
+  ![Birthday View](https://i.imgur.com/W50mU6L.png)
 
 ### 4. Message Interactions
 - Expand messages to view full content
