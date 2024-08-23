@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://velgarde.github.io/birthday-scrapbook/",
+  "homepage": "https://velgardey.github.io/birthday-scrapbook/",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
